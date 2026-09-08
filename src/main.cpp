@@ -4,7 +4,8 @@
 #include "raylib.h"
 #include <random>
 
-int main() {
+int main() 
+{
     const int screenW = 1000, screenH = 700;
     InitWindow(screenW, screenH, "mini-ecs demo");
     SetTargetFPS(60);
@@ -29,7 +30,7 @@ int main() {
         float dt = GetFrameTime();
         movementSystem(world, dt);
         wallBounceSystem(world, screenW, screenH);
-
+        collisionSystem(world);
         BeginDrawing();
         ClearBackground(RAYWHITE);
         renderSystem(world);
