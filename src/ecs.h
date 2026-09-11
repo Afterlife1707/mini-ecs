@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <unordered_map>
+#include "sparse_set.h"
 
 using Entity = uint32_t;   // an entity IS just a number, nothing more
 
@@ -25,9 +26,9 @@ public:
     Entity createEntity() { return nextId_++; }
 
     template <typename T>
-    ComponentStorage<T>& storage() 
+    SparseSet<T>& storage() 
     {
-        static ComponentStorage<T> instance;  // one storage per component type
+        static SparseSet<T> instance;  // one storage per component type
         return instance;
     }
 
