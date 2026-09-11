@@ -1,6 +1,7 @@
 #include "systems.h"
 #include "components.h"
 #include "raylib.h"
+#include "spatial_hash_grid.h"
 #include <cmath>
 #include <vector>
 
@@ -66,7 +67,7 @@ void renderSystem(World& world)
     }
 }
 
-void collisionSystem(World& world) 
+void collisionSystem(World& world, SpatialHashGrid& grid) 
 {
     auto& positions = world.storage<Position>();
     auto& circles = world.storage<Circle>();
@@ -75,24 +76,37 @@ void collisionSystem(World& world)
     auto& posArray = positions.denseArray();
     auto& posEntities = positions.entities();
 
-    std::vector<Entity> collidable;
-    for (size_t i = 0; i<posArray.size();i++)
+    // Rebuild the grid fresh each frame — entities moved since last frame
+    grid.clear();
+    for (size_t i = 0; i < posArray.size(); ++i) 
     {
         Entity e = posEntities[i];
-        if (circles.get(e)) collidable.push_back(e);
+        if (circles.get(e)) 
+        {
+            grid.insert(e, posArray[i].x, posArray[i].y);
+        }
     }
 
-    for (size_t i = 0; i < collidable.size(); ++i) 
+    // Check each entity only against nearby entities, not all of them
+    std::vector<Entity> nearby;
+    for (size_t i = 0; i < posArray.size(); ++i) 
     {
-        for (size_t j = i + 1; j < collidable.size(); ++j) 
-        {
-            Entity a = collidable[i];
-            Entity b = collidable[j];
+        Entity a = posEntities[i];
+        Circle* circA = circles.get(a);
+        if (!circA) continue;
 
-            Position* posA = positions.get(a);
+        Position* posA = positions.get(a);
+
+        nearby.clear();
+        grid.queryNearby(posA->x, posA->y, nearby);
+
+        for (Entity b : nearby)
+        {
+            if (b <= a) continue;  // avoid double-checking pairs and self-checks
+
             Position* posB = positions.get(b);
-            Circle* circA = circles.get(a);
             Circle* circB = circles.get(b);
+            if (!posB || !circB) continue;
 
             float dx = posB->x - posA->x;
             float dy = posB->y - posA->y;

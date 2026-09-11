@@ -3,6 +3,7 @@
 #include "systems.h"
 #include "raylib.h"
 #include <random>
+#include "spatial_hash_grid.h"
 
 int main() 
 {
@@ -11,12 +12,13 @@ int main()
     SetTargetFPS(60);
 
     World world;
+    SpatialHashGrid grid(50.0f); 
     std::mt19937 rng(42);
     std::uniform_real_distribution<float> posX(0, screenW);
     std::uniform_real_distribution<float> posY(0, screenH);
     std::uniform_real_distribution<float> vel(-150.f, 150.f);
 
-    const int entityCount = 500;
+    const int entityCount = 2000;
     for (int i = 0; i < entityCount; ++i) 
     {
         Entity e = world.createEntity();
@@ -30,7 +32,7 @@ int main()
         float dt = GetFrameTime();
         movementSystem(world, dt);
         wallBounceSystem(world, screenW, screenH);
-        collisionSystem(world);
+        collisionSystem(world, grid);
         BeginDrawing();
         ClearBackground(RAYWHITE);
         renderSystem(world);
