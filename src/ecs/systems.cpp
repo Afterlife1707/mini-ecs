@@ -67,7 +67,7 @@ void renderSystem(World& world)
     }
 }
 
-void collisionSystem(World& world, SpatialHashGrid& grid) 
+void collisionSystem(World& world) 
 {
     auto& positions = world.storage<Position>();
     auto& circles = world.storage<Circle>();
@@ -76,7 +76,63 @@ void collisionSystem(World& world, SpatialHashGrid& grid)
     auto& posArray = positions.denseArray();
     auto& posEntities = positions.entities();
 
-    // Rebuild the grid fresh each frame — entities moved since last frame
+    std::vector<Entity> collidable;
+    for (size_t i = 0; i<posArray.size();i++)
+    {
+        Entity e = posEntities[i];
+        if (circles.get(e)) collidable.push_back(e);
+    }
+
+    for (size_t i = 0; i < collidable.size(); ++i) 
+    {
+        for (size_t j = i + 1; j < collidable.size(); ++j) 
+        {
+            Entity a = collidable[i];
+            Entity b = collidable[j];
+
+            Position* posA = positions.get(a);
+            Position* posB = positions.get(b);
+            Circle* circA = circles.get(a);
+            Circle* circB = circles.get(b);
+
+            float dx = posB->x - posA->x;
+            float dy = posB->y - posA->y;
+            float distSq = dx * dx + dy * dy;
+            float minDist = circA->radius + circB->radius;
+
+            if (distSq < minDist * minDist && distSq > 0.0001f) 
+            {
+                float dist = std::sqrt(distSq);
+                float overlap = minDist - dist;
+                float nx = dx / dist;
+                float ny = dy / dist;
+
+                posA->x -= nx * overlap * 0.5f;
+                posA->y -= ny * overlap * 0.5f;
+                posB->x += nx * overlap * 0.5f;
+                posB->y += ny * overlap * 0.5f;
+
+                Velocity* velA = velocities.get(a);
+                Velocity* velB = velocities.get(b);
+                if (velA && velB) 
+                {
+                    std::swap(velA->dx, velB->dx);
+                    std::swap(velA->dy, velB->dy);
+                }
+            }
+        }
+    }
+}
+
+void collisionSystemSpatialGrid(World& world, SpatialHashGrid& grid) 
+{
+    auto& positions = world.storage<Position>();
+    auto& circles = world.storage<Circle>();
+    auto& velocities = world.storage<Velocity>();
+
+    auto& posArray = positions.denseArray();
+    auto& posEntities = positions.entities();
+
     grid.clear();
     for (size_t i = 0; i < posArray.size(); ++i) 
     {
@@ -87,7 +143,6 @@ void collisionSystem(World& world, SpatialHashGrid& grid)
         }
     }
 
-    // Check each entity only against nearby entities, not all of them
     std::vector<Entity> nearby;
     for (size_t i = 0; i < posArray.size(); ++i) 
     {
@@ -102,7 +157,7 @@ void collisionSystem(World& world, SpatialHashGrid& grid)
 
         for (Entity b : nearby)
         {
-            if (b <= a) continue;  // avoid double-checking pairs and self-checks
+            if (b <= a) continue;
 
             Position* posB = positions.get(b);
             Circle* circB = circles.get(b);

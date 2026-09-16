@@ -21,7 +21,6 @@ public:
         cells_[key].push_back(e);
     }
 
-    // Gathers all entities in the cell containing (x,y) and its 8 neighbors
     void queryNearby(float x, float y, std::vector<Entity>& out) const 
     {
         int cx = static_cast<int>(std::floor(x / cellSize_));
@@ -49,7 +48,6 @@ private:
         return packKey(cx, cy);
     }
 
-    // Pack two 32-bit cell coords into one 64-bit key for hashing
     static int64_t packKey(int cx, int cy) 
     {
         return (static_cast<int64_t>(cx) << 32) | (static_cast<uint32_t>(cy));

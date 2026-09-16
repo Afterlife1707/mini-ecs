@@ -5,4 +5,5 @@
 void movementSystem(World& world, float dt);
 void wallBounceSystem(World& world, int screenW, int screenH);
 void renderSystem(World& world);
-void collisionSystem(World& world, class SpatialHashGrid& grid);
+void collisionSystem(World& world);
+void collisionSystemSpatialGrid(World& world, class SpatialHashGrid& grid);
