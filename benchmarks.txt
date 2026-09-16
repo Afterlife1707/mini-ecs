@@ -1,0 +1,103 @@
+=== ECS Results ===
+Collision mode: Spatial Grid
+Entity count: 500
+Frames measured: 300
+Average update time: 1.0830 ms
+====================
+
+=== ECS Results ===
+Collision mode: Spatial Grid
+Entity count: 1000
+Frames measured: 300
+Average update time: 1.4547 ms
+====================
+
+=== ECS Results ===
+Collision mode: Spatial Grid
+Entity count: 2000
+Frames measured: 300
+Average update time: 2.2882 ms
+====================
+
+=== ECS Results ===
+Collision mode: Spatial Grid
+Entity count: 4000
+Frames measured: 300
+Average update time: 4.2422 ms
+====================
+
+=== ECS Results ===
+Collision mode: Spatial Grid
+Entity count: 10000
+Frames measured: 300
+Average update time: 9.7947 ms
+====================
+
+-------------------------------------------
+
+=== ECS Results ===
+Collision mode: Naive O(n^2)
+Entity count: 500
+Frames measured: 300
+Average update time: 0.5977 ms
+====================
+
+=== ECS Results ===
+Collision mode: Naive O(n^2)
+Entity count: 1000
+Frames measured: 300
+Average update time: 2.0750 ms
+====================
+
+=== ECS Results ===
+Collision mode: Naive O(n^2)
+Entity count: 2000
+Frames measured: 300
+Average update time: 7.2261 ms
+====================
+
+=== ECS Results ===
+Collision mode: Naive O(n^2)
+Entity count: 4000
+Frames measured: 300
+Average update time: 26.6656 ms
+====================
+
+=== ECS Results ===
+Collision mode: Naive O(n^2)
+Entity count: 10000
+Frames measured: 300
+Average update time: 138.6143 ms
+====================
+
+-------------------------------------------
+
+=== OOP Baseline Results ===
+Entity count: 500
+Frames measured: 300
+Average update time: 0.2995 ms
+============================
+
+=== OOP Baseline Results ===
+Entity count: 1000
+Frames measured: 300
+Average update time: 0.9518 ms
+============================
+
+=== OOP Baseline Results ===
+Entity count: 2000
+Frames measured: 300
+Average update time: 3.4835 ms
+============================
+
+=== OOP Baseline Results ===
+Entity count: 4000
+Frames measured: 300
+Average update time: 12.9660 ms
+============================
+
+=== OOP Baseline Results ===
+Entity count: 10000
+Frames measured: 300
+Average update time: 70.2826 ms
+============================
