@@ -68,6 +68,12 @@ Rendering is excluded from timing; only the update step (movement + wall bounce 
 | 4,000  | 12.97  | 26.67  | 4.24  |
 | 10,000 | 70.28  | 138.61 | 9.79  |
 
+**Linear scale graph**
+<img width="2550" height="535" alt="image" src="https://github.com/user-attachments/assets/a980e769-2d1a-41fb-a8b4-455f70821b60" />
+
+**Log scale graph**
+<img width="2539" height="545" alt="image" src="https://github.com/user-attachments/assets/49b3f57c-3891-465c-8728-4ba34edbadd8" />
+
 
 ```
 Update time at 10,000 entities
